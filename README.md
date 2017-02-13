@@ -2,14 +2,14 @@
 Image manger to mange upload and select image with one line of code
 
 #Installation
-run this command ` composer require elsayednofal/ImageManager `
+run this command ` composer require elsayednofal/imagemanager:dev-master `
 
   then 
 add service provider to you app config in path config/app.php
-` SayedNofal\ImageManager\ImageManagerServiceProvider::class ` 
+` elsayednofal\imagemanager\ImageManagerServiceProvider::class ` 
 
 and in alias add the line 
-` 'ImageManager' => SayedNofal\ImageManager\Http\Controllers\Facades\ImageManager::class `
+` 'ImageManager' => elsayednofal\imagemanagerr\Http\Controllers\Facades\ImageManager::class `
 
  then run ` php artisan vendor:publish `
  now lets use it 
