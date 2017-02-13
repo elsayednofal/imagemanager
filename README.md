@@ -6,11 +6,11 @@ run this command ` composer require elsayednofal/imagemanager:dev-master `
 
   then 
 add service provider to you app config in path config/app.php
-` elsayednofal\imagemanager\ImageManagerServiceProvider::class ` 
+` Elsayednofal\Imagemanager\ImageManagerServiceProvider::class ` 
 
 and in alias add the line 
 
-` 'ImageManager' => elsayednofal\imagemanagerr\Http\Controllers\Facades\ImageManager::class `
+` 'ImageManager' => Elsayednofal\Imagemanagerr\Http\Controllers\Facades\ImageManager::class `
 
  then run
  ` php artisan vendor:publish ` 
