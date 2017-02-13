@@ -12,7 +12,9 @@ and in alias add the line
 
 ` 'ImageManager' => elsayednofal\imagemanagerr\Http\Controllers\Facades\ImageManager::class `
 
- then run ` php artisan vendor:publish `
+ then run
+ ` php artisan vendor:publish ` 
+ 
  now lets use it 
  
 #Config
