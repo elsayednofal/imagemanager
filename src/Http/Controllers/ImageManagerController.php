@@ -31,7 +31,7 @@ class ImageManagerController extends Controller {
         
         // check if image not duplicated
         $content=md5(file_get_contents($request->file('image')));
-        if(is_object($image_mang=  \SayedNofal\ImageManager\Models\ImageManagerModel::where('content',$content)->first())){
+        if(is_object($image_mang=  \Elsayednofal\Imagemanager\Models\ImageManagerModel::where('content',$content)->first())){
             $response->status=200;
             $response->message = 'exist';
             $response->data=[
@@ -127,13 +127,13 @@ class ImageManagerController extends Controller {
         }
         $images=[];
         if(count($images_ids)>0){
-            $images=  \SayedNofal\ImageManager\Models\ImageManagerModel::whereIn('id',$images_ids)->get();
+            $images=  \Elsayednofal\Imagemanager\Models\ImageManagerModel::whereIn('id',$images_ids)->get();
         }
         return view('ImageManager::selector',['name'=>$name,'multi'=>$multi,'images'=>$images]);
     }
     
     function getImages($keyword=''){
-        $images=new \SayedNofal\ImageManager\Models\ImageManagerModel();
+        $images=new \Elsayednofal\Imagemanager\Models\ImageManagerModel();
         if($keyword!=''){
             $images=$images->where('alt','like',"%$keyword%")->orderBy('id','desc')->paginate(10);
         }else{
