@@ -1,5 +1,5 @@
 {
-    "name": "sayed-nofal/image-manager",
+    "name": "imagemanager",
     "description": " package for ImageManager",
     "type": "laravel",
     "license": "proprietary",
