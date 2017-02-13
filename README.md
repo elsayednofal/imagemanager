@@ -39,6 +39,6 @@ some cases like update you want user select only one image so you can use  :
  <?= ImageManager::selector('images[]',[],false)?>
  ```
  
- #support
+#Support
  for any question or errors contact me at : `elsayed_nofal@ymail.com`
  
