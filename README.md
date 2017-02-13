@@ -38,10 +38,10 @@ in some cases you want the user to select just one image :
   ```php  
  //images[] is the variable you will recieve the ids of selected or uploaded images in 
  // [] represent selected ids
- // false => mean only one image can be set
+ // false => means only one image can be set
  <?= ImageManager::selector('images[]',[],false)?>
  ```
  
 #Support
- for any question or errors contact me at : `elsayed_nofal@ymail.com`
+ for any questions contact me at : `elsayed_nofal@ymail.com`
  
