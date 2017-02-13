@@ -20,23 +20,23 @@ and in alias add the line
 #Config
 you can  edit the package config in path config/ImageManager.php
 you can set something like [upload_path,alloweed_types,enable_thumbs,......]
-you will find comment on every single config in the file
+you will find a comment on every single config in the file
  
 #Usage
 one single line in your blade where you want uploader in your form :
 ```php  
- //images[] is the variable you will recive the ids of selected or uploaded images in 
+ //images[] is the variable you will recieve the ids of selected or uploaded images in 
  <?= ImageManager::selector('images[]')?>
  ``` 
  
-some cases like update you want to show old select so you can pass the ids as second prameter like :
+some cases like update you want to show old selected images so you can pass the ids as second prameter like :
  ```php  
- //images[] is the variable you will recive the ids of selected or uploaded images in 
+ //images[] is the variable you will recieve the ids of selected or uploaded images in 
  <?= ImageManager::selector('images[]',[10,15,17])?>
  ``` 
-some cases like update you want user select only one image so you can use  :
+in some cases you want the user to select just one image :
   ```php  
- //images[] is the variable you will recive the ids of selected or uploaded images in 
+ //images[] is the variable you will recieve the ids of selected or uploaded images in 
  // [] represent selected ids
  // false => mean only one image can be set
  <?= ImageManager::selector('images[]',[],false)?>
