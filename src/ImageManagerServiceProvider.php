@@ -1,6 +1,6 @@
 <?php
 
-namespace SayedNofal\ImageManager;
+namespace Elsayednofal\Imagemanager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
