@@ -9,6 +9,7 @@ add service provider to you app config in path config/app.php
 ` elsayednofal\imagemanager\ImageManagerServiceProvider::class ` 
 
 and in alias add the line 
+
 ` 'ImageManager' => elsayednofal\imagemanagerr\Http\Controllers\Facades\ImageManager::class `
 
  then run ` php artisan vendor:publish `
