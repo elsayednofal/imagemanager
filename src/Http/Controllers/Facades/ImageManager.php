@@ -1,5 +1,5 @@
 <?php
-namespace SayedNofal\ImageManager\Http\Controllers\Facades;
+namespace Elsayednofal\Imagemanager\Http\Controllers\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -10,6 +10,6 @@ class ImageManager extends Facade {
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'SayedNofal\ImageManager\Http\Controllers\ImageManagerController'; }
+    protected static function getFacadeAccessor() { return 'Elsayednofal\Imagemanager\Http\Controllers\ImageManagerController'; }
 
 }
