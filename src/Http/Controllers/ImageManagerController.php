@@ -1,6 +1,6 @@
 <?php
 
-namespace SayedNofal\ImageManager\Http\Controllers;
+namespace Elsayednofal\Imagemanager\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
