@@ -12,5 +12,10 @@
         }
     ],
     "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "ElsayedNofal\\Imagemanager\\": "src/"
+        }
+    },
     "require": {}
 }
