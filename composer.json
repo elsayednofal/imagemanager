@@ -11,6 +11,6 @@
             "role":"developer"
         }
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "dev",
     "require": {}
 }
