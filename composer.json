@@ -1,0 +1,16 @@
+{
+    "name": "SayedNofal/ImageManager",
+    "description": " package for ImageManager",
+    "type": "laravel",
+    "license": "proprietary",
+    "version":"1.0",
+    "authors": [
+        {
+            "name": "Elsayed Nofal",
+            "email": "elsayed_nofal@ymail.com",
+            "role":"developer"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {}
+}
