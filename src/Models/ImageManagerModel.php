@@ -1,6 +1,6 @@
 <?php
 
-namespace SayedNofal\ImageManager\Models;
+namespace Elsayednofal\Imagemanager\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
