@@ -63,10 +63,12 @@ $(document).ready(function(){
         var images=modal_div.find('.image_manger_image[data-select="1"]');
         var varibale_name=$(this).attr('data-name');
        // modal_div.prev('.image_manger_inputs').html('');
+       var append=$(this).attr('data-append');
         images.each(function(){
             var image_src=$(this).find('img').attr('src');
             var image_id =$(this).attr('data-id');
-            modal_div.prev('.image_manger_inputs').append(''+
+            
+            $('#'+append).append(''+
                 '<div class="image_container" style="position:relative;border:1px solid;border-color:green;display:inlinr-block;margin:5px;float:left">'+
                     '<img src="'+image_src+'" style="width:150px" />'+
                     '<img class="image_manger_delete_image" src="<?=url('vendor/SayedNofal/ImageManager/images/close.png')?>" style="width:20px;position:absolute;left:-3px;top:-5px;cursor:pointer" />'+
@@ -80,9 +82,11 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.image_manger_delete_image',function(){
-        var is_multi=$(this).closest('div.image_manger_inputs').next('div.modal').find('div.image_manger_choose').attr('data-multi');
+        var is_multi=$('#'+$(this).attr('data-modal')).find('div.image_manger_choose').attr('data-multi');
+        
+        
         if(is_multi=='0'){
-            $(this).closest('div.image_manger_inputs').next('div.modal').find('div.image_manger_choose').attr('data-count',0);
+            $('#'+$(this).attr('data-modal')).find('div.image_manger_choose').attr('data-count',0);
         }
         $(this).closest('div.image_container').remove();
     });
