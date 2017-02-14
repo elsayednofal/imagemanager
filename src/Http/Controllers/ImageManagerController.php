@@ -72,7 +72,7 @@ class ImageManagerController extends Controller {
             $this->makeThumb(config('ImageManager.upload_path') . '/' . date('m-Y').'/'.$fileName, config('ImageManager.upload_path') . '/small/' . date('m-Y').'/'.$fileName, config('ImageManager.small_thumbs_size')[0], config('ImageManager.small_thumbs_size')[1]);
         }
         // save the image to database
-        $image_manger=new \SayedNofal\ImageManager\Models\ImageManagerModel();
+        $image_manger=new \Elsayednofal\Imagemanager\Models\ImageManagerModel();
         $image_manger->name=date('m-Y') . '/' . $fileName;
         $image_manger->content=$content;
         $image_manger->alt=$request->get('alt');
