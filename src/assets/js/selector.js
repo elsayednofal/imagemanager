@@ -82,11 +82,12 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.image_manger_delete_image',function(){
-        var is_multi=$('#'+$(this).attr('data-modal')).find('div.image_manger_choose').attr('data-multi');
+        var modal_id=$(this).closest('.image_manger_inputs').attr('data-modal')
+        var is_multi=$('#'+modal_id).find('div.image_manger_choose').attr('data-multi');
         
-        
+        console.log(is_multi);
         if(is_multi=='0'){
-            $('#'+$(this).attr('data-modal')).find('div.image_manger_choose').attr('data-count',0);
+            $('#'+modal_id).find('div.image_manger_choose').attr('data-count',0);
         }
         $(this).closest('div.image_container').remove();
     });
