@@ -3,7 +3,7 @@
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#image_manger_single_choose_<?= $id ?>">
     choose Image
 </button>
-<div class="image_manger_inputs">
+<div class="image_manger_inputs" id="image_manger_inputs_<?= $id?>" data-modal="image_manger_single_choose_<?= $id ?>">
     @if(isset($images) )
         @foreach($images as $image)
             <div class="image_manager_image_container">
@@ -70,7 +70,6 @@
                                 <div class="show_uploaded_image col-md-9 text-center"></div>
                                 <div class="col-md-2">
                                     <button class="btn btn-primary upload_done actions_buttons" style="display:none" >Done</button>
-                                    <button class="btn btn-danger upload_remove actions_buttons" style="display:none" >remove</button>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +79,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default close_image_manger" data-dismiss="modal">Close</button>
-                <button type="button" style="display: none" data-name="<?= $name ?>" class="btn btn-primary image_manger_save">Save</button>
+                <button type="button" style="display: none" data-name="<?= $name ?>" data-append="image_manger_inputs_<?=$id?>" class="btn btn-primary image_manger_save">Save</button>
             </div>
         </div>
     </div>
