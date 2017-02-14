@@ -14,6 +14,9 @@ and in alias add the line
 
  then run
  ` php artisan vendor:publish ` 
+ then run
+ ` php artisan migrate `
+
  
  now lets use it 
  
