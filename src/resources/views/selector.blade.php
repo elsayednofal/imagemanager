@@ -34,7 +34,7 @@
 
                     <!-- Tab panes -->
                     <div class="tab-content" >
-                        <div role="tabpanel" class="tab-pane active image_manger_choose" data-multi="<?php if ($multi) {echo 1;} else {echo 0;} ?>" data-count="0" id="image_manger_choose_<?= $id ?>">
+                        <div role="tabpanel" class="tab-pane active image_manger_choose" data-multi="<?php if ($multi) {echo 1;} else {echo 0;} ?>" data-count="<?php if(count($images)==0){echo 0;} else {echo count($images);}?>" id="image_manger_choose_<?= $id ?>">
                             <div class="image-manager-search-container">
                                 <div class="row">
                                     <div class="col-md-10">
