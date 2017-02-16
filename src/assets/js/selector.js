@@ -69,7 +69,7 @@ $(document).ready(function(){
             var image_id =$(this).attr('data-id');
             
             $('#'+append).append(''+
-                '<div class="image_container" style="position:relative;border:1px solid;border-color:green;display:inlinr-block;margin:5px;float:left">'+
+                '<div class="image_manager_image_container" style="position:relative;border:1px solid;border-color:green;display:inlinr-block;margin:5px;float:left">'+
                     '<img src="'+image_src+'" style="width:150px" />'+
                     '<img class="image_manger_delete_image" src="<?=url('vendor/SayedNofal/ImageManager/images/close.png')?>" style="width:20px;position:absolute;left:-3px;top:-5px;cursor:pointer" />'+
                     '<input type="hidden" value="'+image_id+'" name="'+varibale_name+'" />'+
@@ -85,11 +85,10 @@ $(document).ready(function(){
         var modal_id=$(this).closest('.image_manger_inputs').attr('data-modal')
         var is_multi=$('#'+modal_id).find('div.image_manger_choose').attr('data-multi');
         
-        console.log(is_multi);
         if(is_multi=='0'){
             $('#'+modal_id).find('div.image_manger_choose').attr('data-count',0);
         }
-        $(this).closest('div.image_container').remove();
+        $(this).closest('div.image_manager_image_container').remove();
     });
     
     $('.submit_upload').click(function(){
