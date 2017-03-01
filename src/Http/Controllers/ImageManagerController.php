@@ -51,7 +51,7 @@ class ImageManagerController extends Controller {
             mkdir(config('ImageManager.upload_path') . '/' . date('m-Y'), 0755);
         }
 
-        $fileName = sha1(random_int(1, 5000) * microtime()) . '.' . $image->extension(); // renameing image
+        $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->extension(); // renameing image
         $image->move(config('ImageManager.upload_path') . '/' . date('m-Y'), $fileName);
         if(config('ImageManager.enable_thumbs') & count(config('ImageManager.thumb_size'))>0 ){
             if (!file_exists(config('ImageManager.upload_path').'/thumbs')) {
@@ -155,5 +155,13 @@ class ImageManagerController extends Controller {
         echo json_encode($response);die;
         
         return response()->json($images,200)->header('Content-Type', 'application/json');
+    }
+    
+    function getImagePath($id){
+        $image=\Elsayednofal\Imagemanager\Models\ImageManagerModel::find($id);
+        if(!is_object($image)){
+            return false;
+        }
+        return url(config('ImageManager.upload_path').'/'.$image->name);
     }
 }
