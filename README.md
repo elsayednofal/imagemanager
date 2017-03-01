@@ -45,6 +45,19 @@ in some cases you want the user to select just one image :
  // false => means only one image can be set
  <?= ImageManager::selector('images[]',[],false)?>
  ```
+ How to get the value of selected or uploaded image ?
+  The ImageManger::selector() inject input hidden with value of ids of selcted images 
+  
+ Retrive Image (display image )
+   ```php
+   ImageManager::getImagePath($id,$size='')
+   id image id
+   size can be '' for orginal size ,
+               'thumb' for thumbnial and
+               'small' for small image
+
+   <img src="{{ImageManager::getImagePath($activity->mainImage->image_id,'small')}}" />
+    ```
  
 #Support
  for any questions contact me at : `elsayed_nofal@ymail.com`
