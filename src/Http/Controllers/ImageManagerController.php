@@ -157,11 +157,18 @@ class ImageManagerController extends Controller {
         return response()->json($images,200)->header('Content-Type', 'application/json');
     }
     
-    function getImagePath($id){
+    function getImagePath($id,$size=''){
         $image=\Elsayednofal\Imagemanager\Models\ImageManagerModel::find($id);
         if(!is_object($image)){
             return false;
         }
-        return url(config('ImageManager.upload_path').'/'.$image->name);
+        if($size=='thumb' && config('ImageManager.enable_thumbs')){
+            $path='thumbs/';
+        }else if($size=='small' && config('ImageManager.enable_small_thumbs')){
+            $path='small/';
+        }else{
+            $path='';
+        }
+        return url(config('ImageManager.upload_path').'/'.$path.$image->name);
     }
 }
