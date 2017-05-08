@@ -338,7 +338,6 @@ class ImageManagerController extends Controller {
                     $src_img = imagecreatefrompng($src);
                     break;
             }
-            $src_img = imagecrop($src_img, $crop_data);
             
             if($flipX!=1){
                 imageflip($src_img, IMG_FLIP_HORIZONTAL);
@@ -349,6 +348,7 @@ class ImageManagerController extends Controller {
             if($rotate!=0){
                 $src_img=  imagerotate($src_img, $rotate, 0);
             }
+            $src_img = imagecrop($src_img, $crop_data);
             switch ($type) {
                 case IMAGETYPE_GIF:
                     imagegif($src_img, $dst);
