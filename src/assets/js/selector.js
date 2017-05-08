@@ -72,12 +72,12 @@ $(document).ready(function(){
     $('.image_manger_edit').click(function(){
         var modal_div=$(this).closest('div.modal');
         var image_div=modal_div.find('.image_manger_image[data-select="1"]');
-        unSelectImage(image_div);
+        image_div.trigger('click');
         var image=image_div.find('img');
         var src=image.attr('src');
         var alt=image.attr('alt');
         $('div.form_upload').find('.upload_alt').val(alt);
-        $('.show_uploaded_image').html('<img id="edit_image" src="'+src+'" style="max-width:1000px" />');
+        $('.show_uploaded_image').html('<img id="edit_image" class="edit-image-manger-img" src="'+src+'" style="max-width:1000px" />');
         showActions('exist');
         $('.image_manger_upload_button').trigger('click');
         $(this).hide();
@@ -316,43 +316,43 @@ $(document).ready(function(){
     /* enable edite*/
     $(document).on('click','.upload_edite',function(){
         $('.component').find('.cropper-buttons').first().clone().appendTo('.show_uploaded_image');
-        $('#edit_image').cropper('enable');
-        $('#edit_image').cropper('crop');
+        $('.edit-image-manger-img').cropper('enable');
+        $('.edit-image-manger-img').cropper('crop');
         showActions('edit');
     }); 
     
     $(document).on('click','#rotate-left',function(){
-        $('#edit_image').cropper('rotate', 45);
+        $('.edit-image-manger-img').cropper('rotate', 45);
     });
     
     $(document).on('click','#rotate-right',function(){
-        $('#edit_image').cropper('rotate', - 45);
+        $('.edit-image-manger-img').cropper('rotate', - 45);
     });
      
     $(document).on('click','.cancle-edit',function(){
         if(!confirm('Are you want to cancle edit?'))return false;
-        $('#edit_image').cropper("clear");
-        $('#edit_image').cropper("destroy");
+        $('.edit-image-manger-img').cropper("clear");
+        $('.edit-image-manger-img').cropper("destroy");
         $('.show_uploaded_image').find('.cropper-buttons').remove();
         showActions('new');
     });
     
     $(document).on('click','#scalex',function(){
         var x = $(this).attr('data-x');
-        $('#edit_image').cropper('scaleX', x);
+        $('.edit-image-manger-img').cropper('scaleX', x);
         $(this).attr('data-x', x * - 1);
     });
     
     $(document).on('click','#scaley',function(){
         var y = $(this).attr('data-y');
-        $('#edit_image').cropper('scaleY', y);
+        $('.edit-image-manger-img').cropper('scaleY', y);
         $(this).attr('data-y', y * - 1);
     });
     
     // save cropper
     $(document).on('click','.save-edit',function(){
-        var crop_data=JSON.stringify($('#edit_image').cropper("getData"));
-        var src=$('#edit_image').attr('src');
+        var crop_data=JSON.stringify($('.edit-image-manger-img').cropper("getData"));
+        var src=$('.edit-image-manger-img').attr('src');
         $.ajax({
             url:'<?=url("image-manager/crop")?>',
             data:{'data':crop_data,'src':src},
@@ -363,7 +363,7 @@ $(document).ready(function(){
             success: function (response) {
                 data=jQuery.parseJSON(response);
                 if(data.status==200){
-                    $('.show_uploaded_image').html('<img id="edit_image" src="'+data.data.path+'/'+data.data.name+'" data-id="'+data.data.id+'" style="max-width:500px" />');
+                    $('.show_uploaded_image').html('<img id="edit_image" class="edit-image-manger-img" src="'+data.data.path+'/'+data.data.name+'" data-id="'+data.data.id+'" style="max-width:500px" />');
                     showActions('new');
                 }else{
                     showActions('edit');
