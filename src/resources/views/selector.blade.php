@@ -1,4 +1,5 @@
 <!-- Button trigger modal -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <?php $id = rand(1, 99999) * rand(2, 100); ?>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#image_manger_single_choose_<?= $id ?>">
     choose Image
@@ -29,7 +30,7 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#image_manger_choose_<?= $id ?>" class="image_manger_choose_button" aria-controls="choose" role="tab" data-toggle="tab">Choose</a></li>
-                        <li role="presentation"><a href="#image_manger_upload_<?= $id ?>" aria-controls="upload" role="tab" data-toggle="tab">Upload</a></li>
+                        <li role="presentation"><a href="#image_manger_upload_<?= $id ?>" class="image_manger_upload_button" aria-controls="upload" role="tab" data-toggle="tab">Upload</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -67,9 +68,30 @@
                             </div>
                             <img src="<?= url('vendor/SayedNofal/ImageManager/images/loader.gif') ?>" width="100" class="upload-loading" style="display: none" />
                             <div class="row">
-                                <div class="show_uploaded_image col-md-9 text-center"></div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-primary upload_done actions_buttons" style="display:none" >Done</button>
+                                <div class="show_uploaded_image col-md-10 text-center"></div>
+                                <div class="col-md-2 uploaded-image-action-area" >
+                                    
+                                </div>
+                                <div class="component" style="display: none">
+                                    <div id="button-component">
+                                        <button class="shadow btn btn-primary upload_done"  >Done</button>
+                                        <br/>
+                                        <br/>
+                                        <button class="shadow btn btn-danger upload_remove"  >Remove</button>
+                                        <br/>
+                                        <br/>
+                                        <button class="shadow btn btn-info upload_edite"  >Edit</button>
+                                        <br/>
+                                        <br/>
+                                        <button class="btn btn-success upload_select" >Select</button>
+                                        <br/>
+                                    </div>
+                                    <div class="cropper-buttons">
+                                        <button type="button" class="btn btn-prmiary" id="rotate-right"><span class="fa fa-rotate-right"></span></button>
+                                        <button type="button" class="btn btn-prmiary"  id="rotate-left"><span class="fa fa-rotate-left"></span></button>
+                                        <button type="button" class="btn btn-prmiary"  id="scalex" data-x='-1'><span class="fa fa-arrows-h"></span></button>
+                                        <button type="button" class="btn btn-prmiary"  id="scaley" data-y='-1'><span class="fa fa-arrows-v"></span></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -80,11 +102,18 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default close_image_manger" data-dismiss="modal">Close</button>
                 <button type="button" style="display: none" data-name="<?= $name ?>" data-append="image_manger_inputs_<?=$id?>" class="btn btn-primary image_manger_save">Save</button>
+                <button type="button" style="display: none" data-name="<?= $name ?>" data-append="image_manger_inputs_<?=$id?>" class="btn btn-info image_manger_edit">Edit</button>
             </div>
         </div>
     </div>
 </div>
 <?php include_once './vendor/SayedNofal/ImageManager/js/selector.js'; ?>
+<style>
+<?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.css'; ?>
+</style>
+<script>
+<?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.js'; ?>
+</script>
 <style>
     .dev-page .dev-page-container, .dev-page .dev-page-container .dev-page-content {
         z-index: 6;

@@ -7,6 +7,7 @@ $(document).ready(function(){
     
     getImages();
     
+    // auto scroll choose images
     $('.image_manger_images-container').scroll(function() {
         if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
             if (get_images_url === null){
@@ -16,6 +17,7 @@ $(document).ready(function(){
         }
     });
     
+    // get images after search
     $('.image_manger_search_button').click(function(){
         
         $('.image_manger_image').remove();
@@ -29,8 +31,8 @@ $(document).ready(function(){
         getImages();
     });
     
+    // select and unselect action on image
     $(document).on('click', '.image_manger_image', function () {   
-        console.log(this);
         if($(this).attr('data-select')==='1'){
             unSelectImage(this);
             $(this).closest('div.image_manger_choose').attr('data-count',0);
@@ -51,13 +53,40 @@ $(document).ready(function(){
             
         }
         
+        // show and hide save buuton 
         if(number_of_selected_images>0){
             $('.image_manger_save').show();
         }else{
             $('.image_manger_save').hide();
         }
+        //show and hide edit button
+        if(number_of_selected_images==1){
+            $('.image_manger_edit').show();
+        }else{
+            $('.image_manger_edit').hide();
+        }
+        
     });
     
+    //edit selected image
+    $('.image_manger_edit').click(function(){
+        var modal_div=$(this).closest('div.modal');
+        var image_div=modal_div.find('.image_manger_image[data-select="1"]');
+        unSelectImage(image_div);
+        var image=image_div.find('img');
+        var src=image.attr('src');
+        var alt=image.attr('alt');
+        $('div.form_upload').find('.upload_alt').val(alt);
+        $('.show_uploaded_image').html('<img id="edit_image" src="'+src+'" style="max-width:1000px" />');
+        showActions('exist');
+        $('.image_manger_upload_button').trigger('click');
+        $(this).hide();
+        $('.upload_edite').first().trigger('click');
+        
+    });
+    
+    
+    // save and apply result
     $('.image_manger_save').click(function(){
         var modal_div=$(this).closest('div.modal');
         var images=modal_div.find('.image_manger_image[data-select="1"]');
@@ -77,10 +106,15 @@ $(document).ready(function(){
             );
             unSelectImage(this);
         });
+        $('.image_manger_image[data-select="1"]').each(function(){
+            unSelectImage(this);
+        });
+        $('.image_manger_edit').hide();
         $('.close_image_manger').trigger('click');
         $(window).resize();
     });
     
+    // remove added images
     $(document).on('click','.image_manger_delete_image',function(){
         var modal_id=$(this).closest('.image_manger_inputs').attr('data-modal')
         var is_multi=$('#'+modal_id).find('div.image_manger_choose').attr('data-multi');
@@ -91,6 +125,7 @@ $(document).ready(function(){
         $(this).closest('div.image_manager_image_container').remove();
     });
     
+    // submit upload new image
     $('.submit_upload').click(function(){
         $(this).closest('div.form_upload').find('alert').remove();
         var files=$(this).closest('div.form_upload').find('.upload_image_input').prop('files')
@@ -112,31 +147,81 @@ $(document).ready(function(){
         uploadImage('<?=url("image-manager/upload")?>',files[0],alt);
     });
     
-    $('.upload_done').click(function(){
+    // Done uploaded images and move to select area
+    $(document).on('click','.upload_done',function(){
         var images_resut=$(this).closest('div.image_manger_upload').find('div.show_uploaded_image')
-        console.log(images_resut);
         var img=images_resut.find('img');
-        console.log(img);
         var src=img.attr('src');
-        var id=img.attr('data-id');
-        $('.image_manger_choose .image_manger_images-container .row').prepend('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+id+'" ><img src="'+src+'" /></div>');
-        $('.image_manger_choose_button').trigger('click');
-        $('.image_manger_image[data-id="'+id+'"]').trigger('click');
+        var alt=$('.submit_upload').closest('div.form_upload').find('.upload_alt').val();
+        var action_area=$(this).closest('div.image_manger_upload').find('.uploaded-image-action-area');
+        $.ajax({
+            url: './image-manager/done?src='+src+'&alt='+alt, // point to server-side PHP script 
+            dataType: 'text',  // what to expect back from the PHP script, if anything
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'post',
+            beforeSend: function (xhr) {
+                action_area.html('<br style="clear:both"/><img class="image_manager_loader" src="<?=url('vendor/SayedNofal/ImageManager/images/loader.gif')?>" width="100"/>');
+            },
+            success: function(response){
+                var data=jQuery.parseJSON(response);
+                console.log(response)
+                if(data.status==200){
+                    img.attr('data-id',data.data.id);
+                    img.attr('src',data.data.path+'/'+data.data.name);
+                    img.attr('alt',data.data.alt);
+                    $('.image_manger_choose .image_manger_images-container .row').prepend('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+data.data.id+'" ><img src="'+data.data.path+'/'+data.data.name+'" alt="'+data.data.alt+'" /></div>');
+                    showActions('done');
+                }
+            }
+        });
         
     });
     
+    // applay uploaded images and move to select area
+    $(document).on('click','.upload_select',function(){
+        var images_resut=$(this).closest('div.image_manger_upload').find('div.show_uploaded_image');
+        var img=images_resut.find('img');
+        var src=img.attr('src');
+        var id=img.attr('data-id');
+       // $('.image_manger_choose .image_manger_images-container .row').prepend('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+id+'" ><img src="'+src+'" /></div>');
+        $('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+        $('.image_manger_choose_button').trigger('click');
+        
+        $('.show_uploaded_image').html('');
+        var action_area=$('.uploaded-image-action-area').html('');
+        $('.form_upload input').each(function(){
+            $(this).val('');
+        });
+    });
+    
+    // remove temp image and clear upload area
+    $(document).on('click','.upload_remove',function(){
+        if(!confirm('are you sure? you want to remove the image')){
+            return false;
+        }
+        
+        $(this).closest('div.image_manger_upload').find('div.show_uploaded_image').html('');
+        $('.uploaded-image-action-area').html('');
+        $('.form_upload input').each(function(){
+            $(this).val('');
+        });
+    });
+    
+    // select image actions
     function selectImage(image){
-        //$(image).css({'border':'5px solid','border-color': '#03A9F4'});
         $(image).addClass('active').attr('data-select','1');
         number_of_selected_images++;
     }
     
+    // unselect image action
     function unSelectImage(image){
-        //$(image).css({'border':'2px solid','border-color': '#00000'});
         $(image).removeClass('active').attr('data-select','0');
         number_of_selected_images--;
     }
     
+    // get images funcction
     function getImages(){
         $.ajax({
            url:get_images_url,
@@ -159,7 +244,7 @@ $(document).ready(function(){
                }
                get_images_url=response.data.next_page_url;
                for(var i in response.data.data){
-                    $('.image_manger_choose .image_manger_images-container .row').append('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+response.data.data[i].id+'" ><img src="'+response.upload_path+'/'+response.data.data[i].name+'" /></div>');
+                    $('.image_manger_choose .image_manger_images-container .row').append('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+response.data.data[i].id+'" ><img src="'+response.upload_path+'/'+response.data.data[i].name+'" alt="'+response.data.data[i].alt+'"/></div>');
                }  
            }
 
@@ -167,6 +252,7 @@ $(document).ready(function(){
        }); 
     }
     
+    // handel upload image
     function uploadImage(url,files,alt){
         var file_data = files;   
         var form_data = new FormData();                  
@@ -189,12 +275,11 @@ $(document).ready(function(){
                 console.log(data);
                 if(data.status===200){
                     $('.upload-loading').hide();
-                    $('.show_uploaded_image').html('<img src="'+data.data.path+'/'+data.data.name+'" data-id="'+data.data.id+'" style="max-width:500px" />')
-                   $('.upload_done').show();
-                   $('.actions_buttons').show();
-                   if(data.message=='exist'){
-                       $('.upload_remove').remove();
-                   }
+                    $('.show_uploaded_image').html('<img id="edit_image" src="'+data.data.path+'/'+data.data.name+'" data-id="'+data.data.id+'" style="max-width:1000px" />')
+                    showActions('new');
+                    if(data.message=='exist'){
+                       showActions('exist');
+                    }
                 }else{
                     $('.show_uploaded_image').html('<div class="alert alert-danger alert-dismissible" role="alert">'+
                                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'+
@@ -206,6 +291,89 @@ $(document).ready(function(){
         });
     }
     
+    function showActions(type){
+        $('.uploaded-image-action-area').html('');
+        if(type=='new'){
+            $('.component').first().find('#button-component').clone().appendTo('.uploaded-image-action-area');
+            $('.uploaded-image-action-area').find('.upload_select').hide()
+        }else if(type=='exist'){
+            $('.component').first().find('#button-component').clone().appendTo('.uploaded-image-action-area');
+            $('.uploaded-image-action-area').find('.upload_remove').hide();
+            $('.uploaded-image-action-area').find('.upload_done').hide();
+        }else if(type=='done'){
+            $('.uploaded-image-action-area').html('<button class="btn btn-success upload_select" >Select</button>');
+        }else if(type=='edit'){
+            $('.uploaded-image-action-area').html('<button class="btn btn-danger cancle-edit">Cancle Edit</button>\n\
+                                                   <br/><br/>\n\
+                                                   <button class="btn btn-info save-edit">Save Edit</button>');
+        }else if(type=='loading'){
+            $('.uploaded-image-action-area').html('<br style="clear:both"/><img class="image_manager_loader" src="<?=url('vendor/SayedNofal/ImageManager/images/loader.gif')?>" width="100"/>');
+        }
+    }
+    
+    
+    //##################### cropper js Actions ############################//
+    /* enable edite*/
+    $(document).on('click','.upload_edite',function(){
+        $('.component').find('.cropper-buttons').first().clone().appendTo('.show_uploaded_image');
+        $('#edit_image').cropper('enable');
+        $('#edit_image').cropper('crop');
+        showActions('edit');
+    }); 
+    
+    $(document).on('click','#rotate-left',function(){
+        $('#edit_image').cropper('rotate', 45);
+    });
+    
+    $(document).on('click','#rotate-right',function(){
+        $('#edit_image').cropper('rotate', - 45);
+    });
+     
+    $(document).on('click','.cancle-edit',function(){
+        if(!confirm('Are you want to cancle edit?'))return false;
+        $('#edit_image').cropper("clear");
+        $('#edit_image').cropper("destroy");
+        $('.show_uploaded_image').find('.cropper-buttons').remove();
+        showActions('new');
+    });
+    
+    $(document).on('click','#scalex',function(){
+        var x = $(this).attr('data-x');
+        $('#edit_image').cropper('scaleX', x);
+        $(this).attr('data-x', x * - 1);
+    });
+    
+    $(document).on('click','#scaley',function(){
+        var y = $(this).attr('data-y');
+        $('#edit_image').cropper('scaleY', y);
+        $(this).attr('data-y', y * - 1);
+    });
+    
+    // save cropper
+    $(document).on('click','.save-edit',function(){
+        var crop_data=JSON.stringify($('#edit_image').cropper("getData"));
+        var src=$('#edit_image').attr('src');
+        $.ajax({
+            url:'<?=url("image-manager/crop")?>',
+            data:{'data':crop_data,'src':src},
+            method:'post',
+            beforeSend: function (xhr) {
+                showActions('loading');
+            },
+            success: function (response) {
+                data=jQuery.parseJSON(response);
+                if(data.status==200){
+                    $('.show_uploaded_image').html('<img id="edit_image" src="'+data.data.path+'/'+data.data.name+'" data-id="'+data.data.id+'" style="max-width:500px" />');
+                    showActions('new');
+                }else{
+                    showActions('edit');
+                    $('.uploaded-image-action-area').append('<br/><span style="color:red">Something went wrong , try again</span>');
+                }
+            }
+           
+        });
+       
+    });
     
     
 });

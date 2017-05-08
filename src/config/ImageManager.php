@@ -34,6 +34,17 @@ return [
     'small_thumbs_size'=>[250,0],
     
     /*
+     * create custome thumbnails from uploaded image
+     * you can set set custom_thumbs as follow
+     * custom_thumb=>['thumb_name1'=>[width,hiegh],'thumb_name2=>[width,hight]]
+     */
+    "custom_thumbs"=>[
+        //"thumb1"=>[200,0],
+        "wide-570"=>[570,0],
+        "wide-570"=>[285,0],
+    ],
+    
+    /*
      * applay middelware groupe to this package controller 
      * ex :- 'middelware_group'=>'backend' or 'middelware_group'=>'web'
      */
