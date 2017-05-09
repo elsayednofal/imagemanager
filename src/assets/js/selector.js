@@ -351,8 +351,9 @@ $(document).ready(function(){
     
     // save cropper
     $(document).on('click','.save-edit',function(){
-        var crop_data=JSON.stringify($('.edit-image-manger-img').cropper("getData"));
-        var src=$('.edit-image-manger-img').attr('src');
+        var img=$(this).closest('div.image_manger_upload').find('img.edit-image-manger-img');
+        var crop_data=JSON.stringify(img.cropper("getData"));
+        var src=img.attr('src');
         $.ajax({
             url:'<?=url("image-manager/crop")?>',
             data:{'data':crop_data,'src':src},
