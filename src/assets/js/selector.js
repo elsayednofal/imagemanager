@@ -99,7 +99,7 @@ $(document).ready(function(){
             
             $('#'+append).append(''+
                 '<div class="image_manager_image_container" style="position:relative;border:1px solid;border-color:green;display:inlinr-block;margin:5px;float:left">'+
-                    '<img src="'+image_src+'" style="width:150px" />'+
+                    '<img src="'+image_src+'"  />'+
                     '<img class="image_manger_delete_image" src="<?=url('vendor/SayedNofal/ImageManager/images/close.png')?>" style="width:20px;position:absolute;left:-3px;top:-5px;cursor:pointer" />'+
                     '<input type="hidden" value="'+image_id+'" name="'+varibale_name+'" />'+
                 '</div>'
@@ -186,7 +186,12 @@ $(document).ready(function(){
         var src=img.attr('src');
         var id=img.attr('data-id');
        // $('.image_manger_choose .image_manger_images-container .row').prepend('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+id+'" ><img src="'+src+'" /></div>');
-        $('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+        if($('.image_manger_image[data-id="'+id+'"]').length>0){
+            $('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+        }else{
+            $('.image_manger_choose .image_manger_images-container .row').prepend('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+id+'" ><img src="'+src+'"  /></div>');
+            $('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+        }
         $('.image_manger_choose_button').trigger('click');
         
         $('.show_uploaded_image').html('');
