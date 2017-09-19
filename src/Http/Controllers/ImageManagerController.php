@@ -4,7 +4,7 @@ namespace Elsayednofal\Imagemanager\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Elsayednofal\Imagemanager\Http\Helpers\Cropper;
+use Elsayednofal\Imagemanager\Http\Controllers\Compress;
 
 class ImageManagerController extends Controller {
     
@@ -56,6 +56,9 @@ class ImageManagerController extends Controller {
         $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->extension(); // renameing image
         $image->move(config('ImageManager.upload_path') . '/temp', $fileName);
         
+        // compress image
+        $comproser=new Compress(config('ImageManager.upload_path') . '/temp/'.$fileName, config('ImageManager.upload_path') . '/temp/'.$fileName, 60);
+        $comproser->compress_image();
         
         
         $response->status = 200;
@@ -184,7 +187,6 @@ class ImageManagerController extends Controller {
         elseif ($ext == "3") //png
             $source_image = imagecreatefrompng($src);
 
-       
 	//$source_image = imagecreatefromjpeg($src);
 	$width = imagesx($source_image);
 	$height = imagesy($source_image);
@@ -202,6 +204,15 @@ class ImageManagerController extends Controller {
 	
 	/* create the physical thumbnail image to its destination */
 	imagejpeg($virtual_image, $dest);
+        if ($ext == '1') //GIF
+            imagegif ($virtual_image, $dest);
+        elseif ($ext == "2") //jpg
+            imagejpeg($virtual_image, $dest,80);
+        elseif ($ext == "3"){ //png
+            $white = imagecolorallocatealpha($virtual_image, 255, 255, 255, 127);
+            imagefill($virtual_image, 0, 0, $white);
+            imagepng ($virtual_image, $dest, 9);
+        }
     }
     
     function selector($name,$images_ids=[],$multi=TRUE){
@@ -368,4 +379,5 @@ class ImageManagerController extends Controller {
         }        
     }
     
+   
 }
