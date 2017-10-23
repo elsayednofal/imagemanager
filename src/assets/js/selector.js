@@ -152,7 +152,7 @@ $(document).ready(function(){
         var images_resut=$(this).closest('div.image_manger_upload').find('div.show_uploaded_image')
         var img=images_resut.find('img');
         var src=img.attr('src');
-        var alt=$('.submit_upload').closest('div.form_upload').find('.upload_alt').val();
+        var alt=images_resut.find('.submit_upload').closest('div.form_upload').find('.upload_alt').val();
         var action_area=$(this).closest('div.image_manger_upload').find('.uploaded-image-action-area');
         $.ajax({
             url: './image-manager/done?src='+src+'&alt='+alt, // point to server-side PHP script 
