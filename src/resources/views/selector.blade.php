@@ -113,11 +113,14 @@
 </style>
 <script>
 <?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.js'; ?>
+    $(document).ready(function() {
+    $('body').append($('#image_manger_single_choose_<?= $id ?>'));
+ });
 </script>
 <style>
-    .dev-page .dev-page-container, .dev-page .dev-page-container .dev-page-content {
+/*    .dev-page .dev-page-container, .dev-page .dev-page-container .dev-page-content {
         z-index: 6;
-    }
+    }*/
     .image-manager-modal {
         padding: 0 !important;
     }
