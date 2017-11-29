@@ -130,8 +130,6 @@ $(document).ready(function(){
         $(this).closest('div.form_upload').find('alert').remove();
         var files=$(this).closest('div.form_upload').find('.upload_image_input').prop('files')
         var alt=$(this).closest('div.form_upload').find('.upload_alt').val();
-        console.log('+++>'+$(this).closest('div.form_upload').find('.upload_alt'));
-        console.log('====>'+alt);
         if(files.length==0){
             $(this).closest('div.form_upload').prepend('<div class="alert alert-danger alert-dismissible" role="alert">'+
                                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>you must select image.</div>');
@@ -152,7 +150,7 @@ $(document).ready(function(){
         var images_resut=$(this).closest('div.image_manger_upload').find('div.show_uploaded_image')
         var img=images_resut.find('img');
         var src=img.attr('src');
-        var alt=images_resut.find('.submit_upload').closest('div.form_upload').find('.upload_alt').val();
+        var alt=$('.submit_upload').closest('div.form_upload').find('.upload_alt').val();
         var action_area=$(this).closest('div.image_manger_upload').find('.uploaded-image-action-area');
         $.ajax({
             url: './image-manager/done?src='+src+'&alt='+alt, // point to server-side PHP script 
@@ -166,7 +164,6 @@ $(document).ready(function(){
             },
             success: function(response){
                 var data=jQuery.parseJSON(response);
-                console.log(response)
                 if(data.status==200){
                     img.attr('data-id',data.data.id);
                     img.attr('src',data.data.path+'/'+data.data.name);
@@ -187,10 +184,12 @@ $(document).ready(function(){
         var id=img.attr('data-id');
        // $('.image_manger_choose .image_manger_images-container .row').prepend('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+id+'" ><img src="'+src+'" /></div>');
         if($('.image_manger_image[data-id="'+id+'"]').length>0){
-            $('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+            //$('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+            $(this).closest('div.tab-content').find('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
         }else{
             $('.image_manger_choose .image_manger_images-container .row').prepend('<div class="col-md-2 col-sm-4 image_manger_image" data-id="'+id+'" ><img src="'+src+'"  /></div>');
-            $('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+            $(this).closest('div.tab-content').find('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
+            //$('.image_manger_image[data-id="'+id+'"]').first().trigger('click');
         }
         $('.image_manger_choose_button').trigger('click');
         
@@ -277,7 +276,6 @@ $(document).ready(function(){
             type: 'post',
             success: function(response){
                 var data=jQuery.parseJSON(response);
-                console.log(data);
                 if(data.status===200){
                     $('.upload-loading').hide();
                     $('.show_uploaded_image').html('<img id="edit_image" src="'+data.data.path+'/'+data.data.name+'" data-id="'+data.data.id+'" style="max-width:1000px" />')
