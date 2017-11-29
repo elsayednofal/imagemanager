@@ -69,11 +69,9 @@ one single line in your blade where you want uploader in your form :
  # Retrive Image (display image )
 id image id 
 
-size can be empty " " for orginal size , 
+size can be empty " " for orginal size , "thumb" for thumbnial and "small" for small image
 
-               'thumb' for thumbnial and 
-               
-               'small' for small image 
+you can get any size you pre-define in config file like "wide-500"
                
                
 ```php
