@@ -1,17 +1,13 @@
 <?php
-
 namespace Elsayednofal\Imagemanager\Http\Controllers;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Elsayednofal\Imagemanager\Http\Controllers\Compress;
-
 class ImageManagerController extends Controller {
     
     
     public function uplooadImage(Request $request) {
         $response = new \stdClass();
-
         // check if client send image
         if (!$request->hasFile('image')) {
             $response->status = 400;
@@ -20,10 +16,9 @@ class ImageManagerController extends Controller {
             echo json_encode($response);
             die;
         }
-
         // check if file is valide image
         $image = $request->file('image');
-        if (!in_array($image->extension(), config('ImageManager.alloweed_types'))) {
+        if (!in_array($image->getClientOriginalExtension(), config('ImageManager.alloweed_types'))) {
             $response->status = 400;
             $response->message = 'image type not allowed';
             $response->data = [];
@@ -52,13 +47,10 @@ class ImageManagerController extends Controller {
         if (!file_exists(config('ImageManager.upload_path') . '/temp' )) {
             mkdir(config('ImageManager.upload_path') . '/temp', 0755);
         }
-
-        $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->extension(); // renameing image
+        $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->getClientOriginalExtension(); // renameing image
         $image->move(config('ImageManager.upload_path') . '/temp', $fileName);
         
-        // compress image
-        $comproser=new Compress(config('ImageManager.upload_path') . '/temp/'.$fileName, config('ImageManager.upload_path') . '/temp/'.$fileName, 60);
-        $comproser->compress_image();
+        
         
         
         $response->status = 200;
@@ -79,7 +71,10 @@ class ImageManagerController extends Controller {
         if (!file_exists(config('ImageManager.upload_path') . '/' . date('m-Y'))) {
             mkdir(config('ImageManager.upload_path') . '/' . date('m-Y'), 0755);
         }
-
+	    
+	// compress image
+        $comproser=new Compress('./'.config('ImageManager.upload_path').'/temp/'.$fileName, './'.config('ImageManager.upload_path') . '/temp/'.$fileName, 60);
+        $comproser->compress_image();
         $fileName = $src; // renameing image
         rename('./'.config('ImageManager.upload_path').'/temp/'.$fileName, './'.config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName);
         
@@ -87,6 +82,9 @@ class ImageManagerController extends Controller {
         $this->applyThumbs($fileName);
         
         $content=md5(file_get_contents('./'.config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName));
+	    
+	    
+	
         
         // save the image to database
         $image_manger=new \Elsayednofal\Imagemanager\Models\ImageManagerModel();
@@ -106,11 +104,9 @@ class ImageManagerController extends Controller {
         echo json_encode($response);
         die;
     }
-
     
     public function uplooadImage_old(Request $request) {
         $response = new \stdClass();
-
         // check if client send image
         if (!$request->hasFile('image')) {
             $response->status = 400;
@@ -119,7 +115,6 @@ class ImageManagerController extends Controller {
             echo json_encode($response);
             die;
         }
-
         // check if file is valide image
         $image = $request->file('image');
         if (!in_array($image->extension(), config('ImageManager.alloweed_types'))) {
@@ -151,7 +146,6 @@ class ImageManagerController extends Controller {
         if (!file_exists(config('ImageManager.upload_path') . '/' . date('m-Y'))) {
             mkdir(config('ImageManager.upload_path') . '/' . date('m-Y'), 0755);
         }
-
         $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->extension(); // renameing image
         $image->move(config('ImageManager.upload_path') . '/' . date('m-Y'), $fileName);
         
@@ -175,18 +169,15 @@ class ImageManagerController extends Controller {
         echo json_encode($response);
         die;
     }
-
     private function makeThumb($src, $dest, $desired_width,$desired_height) {
 	/* read the source image */
        $ext = exif_imagetype($src);
-
         if ($ext == '1') //GIF
             $source_image = imagecreatefromgif($src);
         elseif ($ext == "2") //jpg
             $source_image = imagecreatefromjpeg($src);
         elseif ($ext == "3") //png
             $source_image = imagecreatefrompng($src);
-
 	//$source_image = imagecreatefromjpeg($src);
 	$width = imagesx($source_image);
 	$height = imagesy($source_image);
@@ -340,11 +331,9 @@ class ImageManagerController extends Controller {
                 case IMAGETYPE_GIF:
                     $src_img = imagecreatefromgif($src);
                     break;
-
                 case IMAGETYPE_JPEG:
                     $src_img = imagecreatefromjpeg($src);
                     break;
-
                 case IMAGETYPE_PNG:
                     $src_img = imagecreatefrompng($src);
                     break;
@@ -364,11 +353,9 @@ class ImageManagerController extends Controller {
                 case IMAGETYPE_GIF:
                     imagegif($src_img, $dst);
                     break;
-
                 case IMAGETYPE_JPEG:
                     imagejpeg($src_img, $dst);
                     break;
-
                 case IMAGETYPE_PNG:
                     imagepng($src_img, $dst);
                     break;
