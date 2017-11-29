@@ -16,7 +16,7 @@ run this command
 
  then run
  
-` php artisan vendor:publish --force ` 
+` php artisan vendor:publish ` 
 
 and
 
