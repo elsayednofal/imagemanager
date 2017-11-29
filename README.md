@@ -4,7 +4,7 @@ Image manger to mange upload and select image with one line of code
 # Installation
 
 run this command 
-` composer require elsayednofal/imagemanager:dev-master `
+` composer require elsayednofal/imagemanager `
 
   then add service provider to you app config in path config/app.php
 ` Elsayednofal\Imagemanager\ImageManagerServiceProvider::class ` 
@@ -69,7 +69,7 @@ one single line in your blade where you want uploader in your form :
  # Retrive Image (display image )
 id image id 
 
-size can be '' for orginal size , 
+size can be empty " " for orginal size , 
 
                'thumb' for thumbnial and 
                
