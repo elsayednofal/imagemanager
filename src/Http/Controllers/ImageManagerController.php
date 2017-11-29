@@ -23,7 +23,7 @@ class ImageManagerController extends Controller {
 
         // check if file is valide image
         $image = $request->file('image');
-        if (!in_array($image->extension(), config('ImageManager.alloweed_types'))) {
+        if (!in_array($image->getClientOriginalExtension(), config('ImageManager.alloweed_types'))) {
             $response->status = 400;
             $response->message = 'image type not allowed';
             $response->data = [];
@@ -53,12 +53,10 @@ class ImageManagerController extends Controller {
             mkdir(config('ImageManager.upload_path') . '/temp', 0755);
         }
 
-        $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->extension(); // renameing image
+        $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->getClientOriginalExtension(); // renameing image
         $image->move(config('ImageManager.upload_path') . '/temp', $fileName);
         
-        // compress image
-        $comproser=new Compress(config('ImageManager.upload_path') . '/temp/'.$fileName, config('ImageManager.upload_path') . '/temp/'.$fileName, 60);
-        $comproser->compress_image();
+        
         
         
         $response->status = 200;
@@ -79,6 +77,10 @@ class ImageManagerController extends Controller {
         if (!file_exists(config('ImageManager.upload_path') . '/' . date('m-Y'))) {
             mkdir(config('ImageManager.upload_path') . '/' . date('m-Y'), 0755);
         }
+	    
+	// compress image
+        $comproser=new Compress('./'.config('ImageManager.upload_path').'/temp/'.$fileName, './'.config('ImageManager.upload_path') . '/temp/'.$fileName, 60);
+        $comproser->compress_image();
 
         $fileName = $src; // renameing image
         rename('./'.config('ImageManager.upload_path').'/temp/'.$fileName, './'.config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName);
@@ -87,6 +89,9 @@ class ImageManagerController extends Controller {
         $this->applyThumbs($fileName);
         
         $content=md5(file_get_contents('./'.config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName));
+	    
+	    
+	
         
         // save the image to database
         $image_manger=new \Elsayednofal\Imagemanager\Models\ImageManagerModel();
