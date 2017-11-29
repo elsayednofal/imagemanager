@@ -67,10 +67,14 @@ one single line in your blade where you want uploader in your form :
   you can get array of ids of selected image when you submit your form 
   
  # Retrive Image (display image )
- id image id
-size can be '' for orginal size ,
-               'thumb' for thumbnial and
-               'small' for small image
+id image id 
+
+size can be '' for orginal size , 
+
+               'thumb' for thumbnial and 
+               
+               'small' for small image 
+               
                
 ```php
    ImageManager::getImagePath($id,$size='')
