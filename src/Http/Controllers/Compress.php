@@ -85,7 +85,7 @@ class Compress {
             
             //If not found the file
             if(empty($this->file_url) && !file_exists($this->file_url)){
-                throw new Exception('Please inform the image!');
+                throw new \Exception('Please inform the image!');
                 return false;
             }
             
@@ -96,28 +96,24 @@ class Compress {
             
             //Verifiy if the file is a image
             if(!in_array($image_mime, $array_img_types)){
-                throw new Exception('Please send a image!');
+                throw new \Exception('Please send a image!');
                 return false; 
             }
             
             //Get file size
             $image_size = filesize($this->file_url);
                                     
-            //if image size is bigger than 5mb
-            if($image_size > 10485760){
-                throw new Exception('Please send a imagem smaller than 5mb!');
-                return false;
-            }
+            
             
             //If not found the destination
             if(empty($this->new_name_image)){
-                throw new Exception('Please inform the destination name of image!');
+                throw new \Exception('Please inform the destination name of image!');
                 return false;
             }
             
             //If not found the quality
             if(empty($this->quality)){
-                throw new Exception('Please inform the quality!');
+                throw new \Exception('Please inform the quality!');
                 return false;
             }
             
