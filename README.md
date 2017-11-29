@@ -49,13 +49,14 @@ one single line in your blade where you want uploader in your form :
  <?= ImageManager::selector('images[]',[10,15,17])?>
  ``` 
  
-- in some cases you want the user to select just one image :
+- in some cases you want the user to select just one image : 
 
   ```php  
+  
+ <?= ImageManager::selector('images[]',[],false)?>
  // images[] is the variable you will recieve the ids of selected or uploaded images in 
  // [] represent selected ids
  // false => means only one image can be set
- <?= ImageManager::selector('images[]',[],false)?>
  
  ```
  
