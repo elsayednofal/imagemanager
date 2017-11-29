@@ -73,11 +73,13 @@ one single line in your blade where you want uploader in your form :
 
    <img src="{{ImageManager::getImagePath($activity->mainImage->image_id,'small')}}" />
     ```
+
     
-    id image id
-   size can be '' for orginal size ,
+id image id
+size can be '' for orginal size ,
                'thumb' for thumbnial and
                'small' for small image
+ 
  
 # Support
 
