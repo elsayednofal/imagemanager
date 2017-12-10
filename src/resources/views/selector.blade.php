@@ -62,7 +62,7 @@
                                         <input type="file" class="form-control upload_image_input" />
                                     </div>
                                     <div class="col-md-2">
-                                        <a class="btn btn-primary submit_upload" >submit</a> 
+                                        <a href="javascript:void()" class="btn btn-primary submit_upload" >submit</a> 
                                     </div>
                                 </div>
                             </div>
