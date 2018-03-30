@@ -1,93 +1,6 @@
-<style>
-    .dev-page .dev-page-container, .dev-page .dev-page-container .dev-page-content {
-        z-index: 6;
-    }
-    .image-manager-modal {
-        padding: 0 !important;
-    }
-    .image-manager-modal .modal-dialog {
-        width: 90%;
-    }
-    .image-manager-search-container, .form_upload {
-        padding: 20px 0;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #CCCCCC;
-    }
-    .image_manger_images-container {
-        height: 300px;
-        padding: 0 20px;
-        overflow-y: scroll;
-    }
-    .image_manger_images-container .image_manger_image {
-        height: 150px;
-        text-align: center;
-        margin-bottom: 10px;
-        position: relative;
-    }
-    .image_manger_image img {
-        max-width: 90%;
-        max-height: 90%;
-        /*border: 2px solid #333333;*/
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-        padding: 0.25rem;
-        background-color: #F1F1F1;
-        border: 1px solid #ddd;
-        border-radius: 0.18rem;
-        transition: all .2s ease-in-out;
-    }
-    .image_manger_image.active img {
-        border: 5px solid #00b0ff;
-    }
-    .image_manger_image.active:before {
-        content: "";
-        position: absolute;
-        z-index: 11;
-        top: 0;
-        left: 0;
-        width: 30px;
-        height: 30px;
-        background: url(<?= url('vendor/SayedNofal/ImageManager/images/button-check_blue.png') ?>) no-repeat center;
-        background-size: 100%;
-    }
-    .image_manger_inputs {
-        display: table;
-        width: 100%;
-    }
-    .image_manager_image_container {
-        
-        float: right;
-        position: relative;
-        margin: 5px;
-        padding: 0.25rem;
-        background-color: #F1F1F1;
-        border: 1px solid #ddd;
-        border-radius: 0.18rem;
-        transition: all .2s ease-in-out;
-        max-width: 100%;
-        
-    }
-    .image_manager_image_container img:not(.image_manger_delete_image) {
-        /*height: 150px;*/
-        height:150px;
-        width:150px;
-    }
-    .image_manger_delete_image {
-        position: absolute;
-        
-        right: 1px;
-        top: -3px;
-        /*width: 20px;*/
-        font-size:25px;
-        cursor: pointer;
-    }
-</style>
 <!-- Button trigger modal -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<?php $id = rand(1, 99999) * rand(2, 100); ?>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#image_manger_single_choose_<?= $id ?>">
     choose Image
 </button>
@@ -149,7 +62,7 @@
                                         <input type="file" class="form-control upload_image_input" />
                                     </div>
                                     <div class="col-md-2">
-                                        <a href="javascript:void()" class="btn btn-primary submit_upload" >submit</a> 
+                                        <button class="btn btn-primary submit_upload" >submit</button> 
                                     </div>
                                 </div>
                             </div>
@@ -167,9 +80,7 @@
                                         <button class="shadow btn btn-danger upload_remove"  >Remove</button>
                                         <br/>
                                         <br/>
-                                        <button class="shadow btn btn-info upload_edite"  >Edit</button>
-                                        <br/>
-                                        <br/>
+                                        <button class="shadow btn btn-info upload_edite" style="display:none;" >Edit</button>
                                         <button class="btn btn-success upload_select" >Select</button>
                                         <br/>
                                     </div>
@@ -194,10 +105,91 @@
         </div>
     </div>
 </div>
+@push('script')
 <?php include_once './vendor/SayedNofal/ImageManager/js/selector.js'; ?>
 <style>
 <?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.css'; ?>
 </style>
-<script>
+<script id='manager-script'>
 <?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.js'; ?>
 </script>
+<script>
+<?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.js'; ?>
+    $(document).ready(function() {
+    $('body').append($('#image_manger_single_choose_<?= $id ?>'));
+ });
+</script>
+
+<style>
+    .dev-page .dev-page-container, .dev-page .dev-page-container .dev-page-content {
+        z-index: 6;
+    }
+    .image-manager-modal {
+        padding: 0 !important;
+    }
+    .image-manager-modal .modal-dialog {
+        width: 90%;
+    }
+    .image-manager-search-container, .form_upload {
+        padding: 20px 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #CCCCCC;
+    }
+    .image_manger_images-container {
+        height: 300px;
+        padding: 0 20px;
+        overflow-y: scroll;
+    }
+    .image_manger_images-container .image_manger_image {
+        height: 150px;
+        text-align: center;
+        margin-bottom: 10px;
+        position: relative;
+    }
+    .image_manger_image img {
+        max-width: 90%;
+        max-height: 90%;
+        border: 2px solid #333333;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+    }
+    .image_manger_image.active img {
+        border: 5px solid #00b0ff;
+    }
+    .image_manger_image.active:before {
+        content: "";
+        position: absolute;
+        z-index: 11;
+        top: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+        background: url(<?= url('vendor/SayedNofal/ImageManager/images/button-check_blue.png') ?>) no-repeat center;
+        background-size: 100%;
+    }
+    .image_manger_inputs {
+        display: table;
+        width: 100%;
+    }
+    .image_manager_image_container {
+        float: left;
+        position: relative;
+        margin: 5px;
+    }
+    .image_manager_image_container img:not(.image_manger_delete_image) {
+        height: 150px;
+    }
+    .image_manger_delete_image {
+        position: absolute;
+        left: -3px;
+        top: -5px;
+        width: 20px;
+        cursor: pointer;
+    }
+</style>
+@endpush
+
