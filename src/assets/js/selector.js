@@ -152,7 +152,8 @@ $(document).ready(function(){
         var images_resut=$(this).closest('div.image_manger_upload').find('div.show_uploaded_image')
         var img=images_resut.find('img');
         var src=img.attr('src');
-        var alt=$(this).closest('div.image_manger_upload').closest('div.form_upload').find('.upload_alt').val();
+        var alt=$(this).closest('div.image_manger_upload').find('.upload_alt').val();
+        
         var action_area=$(this).closest('div.image_manger_upload').find('.uploaded-image-action-area');
         $.ajax({
             url: './image-manager/done?src='+src+'&alt='+alt, // point to server-side PHP script 
@@ -281,9 +282,11 @@ $(document).ready(function(){
                 if(data.status===200){
                     $('.upload-loading').hide();
                     $('.show_uploaded_image').html('<img id="edit_image" src="'+data.data.path+'/'+data.data.name+'" data-id="'+data.data.id+'" style="max-width:1000px" />')
-                    showActions('new');
+                    
                     if(data.message=='exist'){
                        showActions('exist');
+                    }else{
+                        showActions('new');
                     }
                 }else{
                     $('.show_uploaded_image').html('<div class="alert alert-danger alert-dismissible" role="alert">'+
@@ -299,10 +302,10 @@ $(document).ready(function(){
     function showActions(type){
         $('.uploaded-image-action-area').html('');
         if(type=='new'){
-            $('.uploaded-image-action-area').html($('#button-component'));
+            $('.uploaded-image-action-area').html($('#button-component').html());
             $('.uploaded-image-action-area').find('.upload_select').hide();
         }else if(type=='exist'){
-            $('.uploaded-image-action-area').html($('#button-component'));
+            $('.uploaded-image-action-area').html($('#button-component').html());
             //$('.component').first().find('#button-component').clone().appendTo('.uploaded-image-action-area');
             $('.uploaded-image-action-area').find('.upload_remove').hide();
             $('.uploaded-image-action-area').find('.upload_done').hide();
