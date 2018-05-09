@@ -11,8 +11,6 @@ class ImageManagerController extends Controller {
     
     public function uplooadImage(Request $request) {
         $response = new \stdClass();
-        //echo "<pre/>";var_dump($request->all());
-        // check if client send image
         if (!$request->hasFile('image')) {
             $response->status = 400;
             $response->message = 'missing image file';
@@ -31,30 +29,25 @@ class ImageManagerController extends Controller {
             die;
         }
         
+        $file_system=new FileSystem();
+        $file_system=$file_system->init();
         
-        // upload the image
-        if (!file_exists(config('ImageManager.upload_path'))) {
-            mkdir(config('ImageManager.upload_path'), 0775);
-        }
-        if (!file_exists(config('ImageManager.upload_path') . '/temp' )) {
-            mkdir(config('ImageManager.upload_path') . '/temp', 0755);
-        }
+        $file_system->makDir(config('ImageManager.upload_path'));
+        $file_system->makDir(config('ImageManager.upload_path').'/temp');
         
-        
+        $filePath = config('ImageManager.upload_path') . '/temp/';
         $fileName = sha1(random_int(1, 5000) *(float) microtime()) . '.' . $image->extension(); // renameing image
-        $image->move(config('ImageManager.upload_path') . '/temp', $fileName);
         
-        // compress image
-        $comproser=new Compress(config('ImageManager.upload_path') . '/temp/'.$fileName, config('ImageManager.upload_path') . '/temp/'.$fileName, 60);
-        $comproser->compress_image();
+        $file_system->uploadFile($filePath,$fileName,$image);
+        
         // check if image not duplicated
-        $content=md5(file_get_contents(config('ImageManager.upload_path') . '/temp/'.$fileName));
+        $content=md5(file_get_contents($file_system->getFullPath($filePath.'/'.$fileName)));
         if(is_object($image_mang=  \Elsayednofal\Imagemanager\Models\ImageManagerModel::where('content',$content)->first())){
             $response->status=200;
             $response->message = 'exist';
             $response->data=[
                 'name'=>$image_mang->name,
-                'path' => config('ImageManager.upload_path'),
+                'path' => $file_system->getFullPath(config('ImageManager.upload_path')),
                 'id'=>$image_mang->id
             ];
             echo json_encode($response);
@@ -65,7 +58,7 @@ class ImageManagerController extends Controller {
         $response->message = 'ok';
         $response->data = [
                         'name' => $fileName,
-                        'path' => config('ImageManager.upload_path').'/temp',
+                        'path' => $file_system->getFullPath(config('ImageManager.upload_path').'/temp'),
                         'id'   => -1
                 ];
         echo json_encode($response);
@@ -76,18 +69,21 @@ class ImageManagerController extends Controller {
     function doneImage(Request $request){
         $src=  explode('/', $request->get('src'));
         $src=end($src);
-        if (!file_exists(config('ImageManager.upload_path') . '/' . date('m-Y'))) {
-            mkdir(config('ImageManager.upload_path') . '/' . date('m-Y'), 0777);
-        }
         $fileName = $src; // renameing image
-        //copy('./'.config('ImageManager.upload_path').'/temp/'.$fileName,'./'.config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName);
-        //unlink('./'.config('ImageManager.upload_path').'/temp/'.$fileName);
-        rename('./'.config('ImageManager.upload_path').'/temp/'.$fileName, './'.config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName);
+        
+        
+        $file_system=new FileSystem();
+        $file_system=$file_system->init();
+       
+        $file_system->makDir(config('ImageManager.upload_path') . '/' . date('m-Y'));
+        
+        $file_system->moveFile(config('ImageManager.upload_path') . '/temp/'.$fileName, config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName);
+        
         
         // applay thumbnails images
         $this->applyThumbs($fileName);
         
-        $content=md5(file_get_contents('./'.config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName));
+        $content=md5(file_get_contents($file_system->getFullPath(config('ImageManager.upload_path').'/'.date('m-Y').'/'.$fileName)));
         
         // save the image to database
         $image_manger=new \Elsayednofal\Imagemanager\Models\ImageManagerModel();
@@ -100,7 +96,7 @@ class ImageManagerController extends Controller {
         $response->message = 'ok';
         $response->data = [
                         'name' => date('m-Y') . '/' . $fileName,
-                        'path' => config('ImageManager.upload_path'),
+                        'path' => $file_system->getFullPath(config('ImageManager.upload_path')),
                         'id'   => $image_manger->id,
                         'alt'  => $image_manger->alt
                 ];
@@ -214,6 +210,11 @@ class ImageManagerController extends Controller {
             imagefill($virtual_image, 0, 0, $white);
             imagepng ($virtual_image, $dest, 9);
         }
+        
+        // applay to s3
+        $file_system=new FileSystem();
+        $file_system=$file_system->init();
+        $file_system->moveThumb($dest,$dest);
     }
     
     function selector($name,$images_ids=[],$multi=TRUE){
@@ -240,11 +241,13 @@ class ImageManagerController extends Controller {
             $upload_path.='/thumbs';
         }
         
+        $file_system=new FileSystem();
+        $file_system=$file_system->init();
         
         $response=[
             'status'=>200,
             'data'=>$images,
-            'upload_path'=>$upload_path
+            'upload_path'=>$file_system->getFullPath($upload_path)
         ];
        // dd($response);
         echo json_encode($response);die;
@@ -257,40 +260,38 @@ class ImageManagerController extends Controller {
         if(!is_object($image)){
             return false;
         }
+        $file_system=new FileSystem();
+        $file_system=$file_system->init();
+        
         //dd(file_exists(config('ImageManager.upload_path').'/'.$size.'/'.$image->name));
         if($size=='thumb' && config('ImageManager.enable_thumbs')){
             $path='thumbs/';
         }else if($size=='small' && config('ImageManager.enable_small_thumbs')){
             $path='small/';
-        }else if($size!='' && file_exists(config('ImageManager.upload_path').'/'.$size.'/'.$image->name)){
+        }else if($size!='' && file_exists($file_system->getFullPath(config('ImageManager.upload_path').'/'.$size.'/'.$image->name))){
             $path=$size.'/';
         }else{
             $path='';
         }
-        return url(config('ImageManager.upload_path').'/'.$path.$image->name);
+        return $file_system->getFullPath(config('ImageManager.upload_path').'/'.$path.$image->name);
     }
     
     
     function applyThumbs($fileName){
         
+        $file_system=new FileSystem();
+        $file_system=$file_system->init();
         // per defined thumnails
         if(config('ImageManager.enable_thumbs') & count(config('ImageManager.thumb_size'))>0 ){
-            if (!file_exists(config('ImageManager.upload_path').'/thumbs')) {
-                mkdir(config('ImageManager.upload_path').'/thumbs', 0775);
-            }       
-            if (!file_exists(config('ImageManager.upload_path').'/thumbs/'.date('m-Y'))) {
-                mkdir(config('ImageManager.upload_path').'/thumbs/'.date('m-Y'), 0775);
-            }       
-            $this->makeThumb(config('ImageManager.upload_path') . '/' . date('m-Y').'/'.$fileName, config('ImageManager.upload_path') . '/thumbs/' . date('m-Y').'/'.$fileName, config('ImageManager.thumb_size')[0], config('ImageManager.thumb_size')[1]);
+            $file_system->makDir(config('ImageManager.upload_path').'/thumbs');
+            $file_system->makDir(config('ImageManager.upload_path').'/thumbs/'.date('m-Y'));
+            $this->makeThumb($file_system->getFullPath(config('ImageManager.upload_path') . '/' . date('m-Y').'/'.$fileName), config('ImageManager.upload_path') . '/thumbs/' . date('m-Y').'/'.$fileName, config('ImageManager.thumb_size')[0], config('ImageManager.thumb_size')[1]);
         }
         if(config('ImageManager.enable_small_thumbs') & count(config('ImageManager.small_thumbs_size'))>0 ){
-            if (!file_exists(config('ImageManager.upload_path').'/small')) {
-                mkdir(config('ImageManager.upload_path').'/small', 0775);
-            }       
-            if (!file_exists(config('ImageManager.upload_path').'/small/'.date('m-Y'))) {
-                mkdir(config('ImageManager.upload_path').'/small/'.date('m-Y'), 0775);
-            }
-            $this->makeThumb(config('ImageManager.upload_path') . '/' . date('m-Y').'/'.$fileName, config('ImageManager.upload_path') . '/small/' . date('m-Y').'/'.$fileName, config('ImageManager.small_thumbs_size')[0], config('ImageManager.small_thumbs_size')[1]);
+            $file_system->makDir(config('ImageManager.upload_path').'/small');
+            $file_system->makDir(config('ImageManager.upload_path').'/small/'.date('m-Y'));
+            
+            $this->makeThumb($file_system->getFullPath(config('ImageManager.upload_path') . '/' . date('m-Y').'/'.$fileName), config('ImageManager.upload_path') . '/small/' . date('m-Y').'/'.$fileName, config('ImageManager.small_thumbs_size')[0], config('ImageManager.small_thumbs_size')[1]);
         }
         
         //custom thumnails
@@ -299,13 +300,9 @@ class ImageManagerController extends Controller {
         foreach(config('ImageManager.custom_thumbs') as $key=>$value){
             // check if value is array of width and hights
             if(count($value)==0)continue;
-            if (!file_exists(config('ImageManager.upload_path').'/'.$key)) {
-                mkdir(config('ImageManager.upload_path').'/'.$key, 0775);
-            }
-            if (!file_exists(config('ImageManager.upload_path').'/'.$key.'/'.date('m-Y'))) {
-                mkdir(config('ImageManager.upload_path').'/'.$key.'/'.date('m-Y'), 0775);
-            }
-            $this->makeThumb(config('ImageManager.upload_path') . '/' . date('m-Y').'/'.$fileName, config('ImageManager.upload_path') . '/'.$key.'/' . date('m-Y').'/'.$fileName, $value[0], $value[1]);
+            $file_system->makDir(config('ImageManager.upload_path').'/'.$key);
+            $file_system->makDir(config('ImageManager.upload_path').'/'.$key.'/'.date('m-Y'));
+            $this->makeThumb($file_system->getFullPath(config('ImageManager.upload_path') . '/' . date('m-Y').'/'.$fileName), config('ImageManager.upload_path') . '/'.$key.'/' . date('m-Y').'/'.$fileName, $value[0], $value[1]);
         }
         
     }
