@@ -56,6 +56,7 @@ you will find a comment on every single config in the file
    <img src="{{ImageManager::getImagePath($activity->mainImage->image_id,'small')}}" />
     ```
  
+ 
 ## Support
  for any questions contact me at : `elsayed_nofal@ymail.com`
  
