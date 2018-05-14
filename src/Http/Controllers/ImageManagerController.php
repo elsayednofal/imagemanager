@@ -268,7 +268,7 @@ class ImageManagerController extends Controller {
             $path='thumbs/';
         }else if($size=='small' && config('ImageManager.enable_small_thumbs')){
             $path='small/';
-        }else if($size!='' && file_exists($file_system->getFullPath(config('ImageManager.upload_path').'/'.$size.'/'.$image->name))){
+        }else if($size!='' && $this->URL_exists($file_system->getFullPath(config('ImageManager.upload_path').'/'.$size.'/'.$image->name))){
             $path=$size.'/';
         }else{
             $path='';
@@ -276,6 +276,11 @@ class ImageManagerController extends Controller {
         return $file_system->getFullPath(config('ImageManager.upload_path').'/'.$path.$image->name);
     }
     
+	function URL_exists($url){
+        	$headers=get_headers($url);
+        	return stripos($headers[0],"200 OK")?true:false;
+    	}
+	
     
     function applyThumbs($fileName){
         
