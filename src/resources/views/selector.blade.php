@@ -1,4 +1,8 @@
 <!-- Button trigger modal -->
+<?php
+        $file_system=new FileSystem();
+        $file_system=$file_system->init();
+?>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <?php $id = rand(1, 99999) * rand(2, 100); ?>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#image_manger_single_choose_<?= $id ?>">
@@ -9,7 +13,7 @@
         @foreach($images as $image)
             <div class="image_manager_image_container">
                 <!--<img src="./uploads/thumbs/02-2017/8134a92623c50e39ef69938c59e6863259d100da.jpeg">-->
-                <img src="{{config('ImageManager.upload_path').'/'.$image->name}}">
+                <img src="{{$file_system->getFullPath(config('ImageManager.upload_path').'/'.$image->name)}}">
                 <img class="image_manger_delete_image" src="{{url('vendor/SayedNofal/ImageManager/images/close.png')}}">
                 <input type="hidden" value="{{$image->id}}" name="{{$name}}">
             </div>
