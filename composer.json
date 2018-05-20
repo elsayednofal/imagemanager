@@ -3,7 +3,7 @@
     "description": " package for ImageManager",
     "type": "laravel",
     "license": "proprietary",
-    "version":"1.7",
+    "version":"1.8",
     "authors": [
         {
             "name": "Elsayed Nofal",
