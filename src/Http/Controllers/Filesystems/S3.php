@@ -28,7 +28,8 @@ class S3 implements FileUpload {
     }
     
     public function makDir($path) {
-        
+        $file=new Local();
+        $file->makDir($path);
     }
     
 }

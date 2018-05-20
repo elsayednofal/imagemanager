@@ -41,7 +41,7 @@ class ImageManagerController extends Controller {
         $file_system->uploadFile($filePath,$fileName,$image);
         
         // check if image not duplicated
-        $content=md5(file_get_contents($file_system->getFullPath($filePath.'/'.$fileName)));
+        $content=md5(file_get_contents($file_system->getFullPath($filePath.$fileName)));
         if(is_object($image_mang=  \Elsayednofal\Imagemanager\Models\ImageManagerModel::where('content',$content)->first())){
             $response->status=200;
             $response->message = 'exist';
@@ -200,7 +200,7 @@ class ImageManagerController extends Controller {
 	imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
 	
 	/* create the physical thumbnail image to its destination */
-	imagejpeg($virtual_image, $dest);
+	//imagejpeg($virtual_image, $dest);
         if ($ext == '1') //GIF
             imagegif ($virtual_image, $dest);
         elseif ($ext == "2") //jpg
