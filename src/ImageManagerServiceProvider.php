@@ -14,11 +14,11 @@ class ImageManagerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/assets' => public_path('vendor/SayedNofal/ImageManager'),
+                    __DIR__ . '/assets' => public_path('vendor/SayedNofal/ImageManager'),
+                    __DIR__ . '/config' => config_path(''),
+                    __DIR__ . '/resources/views' =>  resource_path('Views/image-manager'),
                 ], 'public');
-        $this->publishes([
-            __DIR__ . '/config' => config_path(''),
-                ]);
+        
         
         //load migrations
         if(floatval(Application::VERSION) >= 5.3){
@@ -30,7 +30,7 @@ class ImageManagerServiceProvider extends ServiceProvider
         }
         
         // load view
-        $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'ImageManager');
+        //$this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'ImageManager');
         
         /*
          * loading routes and sometimes add middelware group

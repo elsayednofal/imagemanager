@@ -1,0 +1,131 @@
+<!-- Button trigger modal -->
+<?php
+        $file_system=new \Elsayednofal\Imagemanager\Http\Controllers\FileSystem();
+        $file_system=$file_system->init();
+?>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<?php $id = rand(1, 99999) * rand(2, 100); ?>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#image_manger_single_choose_<?= $id ?>">
+    choose Image
+</button>
+<div class="image_manger_inputs" id="image_manger_inputs_<?= $id?>" data-modal="image_manger_single_choose_<?= $id ?>">
+    @if(isset($images) )
+        @foreach($images as $image)
+            <div class="image_manager_image_container">
+                <!--<img src="./uploads/thumbs/02-2017/8134a92623c50e39ef69938c59e6863259d100da.jpeg">-->
+                <img src="{{$file_system->getFullPath(config('ImageManager.upload_path').'/'.$image->name)}}">
+                <img class="image_manger_delete_image" src="{{url('vendor/SayedNofal/ImageManager/images/close.png')}}">
+                <input type="hidden" value="{{$image->id}}" name="{{$name}}">
+            </div>
+        @endforeach
+    @endif
+</div>
+
+<!-- Modal -->
+<div class="modal fade image-manager-modal" id="image_manger_single_choose_<?= $id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Image Manager</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#image_manger_choose_<?= $id ?>" class="image_manger_choose_button" aria-controls="choose" role="tab" data-toggle="tab">Choose</a></li>
+                        <li role="presentation"><a href="#image_manger_upload_<?= $id ?>" class="image_manger_upload_button" aria-controls="upload" role="tab" data-toggle="tab">Upload</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" >
+                        <div role="tabpanel" class="tab-pane active image_manger_choose" data-multi="<?php if ($multi) {echo 1;} else {echo 0;} ?>" data-count="<?php if(count($images)==0){echo 0;} else {echo count($images);}?>" id="image_manger_choose_<?= $id ?>">
+                            <div class="image-manager-search-container">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control image_manger_search" placeholder="search...." />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn image_manger_search_button"><img width="20" src='<?= url('vendor/SayedNofal/ImageManager/images/search-icon-2.png') ?>'</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="image_manger_images-container">
+                                <div class="row">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane image_manger_upload" id="image_manger_upload_<?= $id ?>">
+                            <div class="form_upload">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" name="alt" placeholder="alternative text .." class="form-control upload_alt" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="file" class="form-control upload_image_input" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary submit_upload" >submit</button> 
+                                    </div>
+                                </div>
+                            </div>
+                            <img src="<?= url('vendor/SayedNofal/ImageManager/images/loader.gif') ?>" width="100" class="upload-loading" style="display: none" />
+                            <div class="row">
+                                <div class="show_uploaded_image col-md-10 text-center"></div>
+                                <div class="col-md-2 uploaded-image-action-area" >
+                                    
+                                </div>
+                                <div class="component" style="display: none">
+                                    <div id="button-component">
+                                        <button class="shadow btn btn-primary upload_done"  >Done</button>
+                                        <br/>
+                                        <br/>
+                                        <button class="shadow btn btn-danger upload_remove"  >Remove</button>
+                                        <br/>
+                                        <br/>
+                                        <button class="shadow btn btn-info upload_edite" style="display:none;" >Edit</button>
+                                        <button class="btn btn-success upload_select" >Select</button>
+                                        <br/>
+                                    </div>
+                                    <div class="cropper-buttons">
+                                        <button type="button" class="btn btn-prmiary" id="rotate-right"><span class="fa fa-rotate-right"></span></button>
+                                        <button type="button" class="btn btn-prmiary"  id="rotate-left"><span class="fa fa-rotate-left"></span></button>
+                                        <button type="button" class="btn btn-prmiary"  id="scalex" data-x='-1'><span class="fa fa-arrows-h"></span></button>
+                                        <button type="button" class="btn btn-prmiary"  id="scaley" data-y='-1'><span class="fa fa-arrows-v"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close_image_manger" data-dismiss="modal">Close</button>
+                <button type="button" style="display: none" data-name="<?= $name ?>" data-append="image_manger_inputs_<?=$id?>" class="btn btn-primary image_manger_save">Save</button>
+                <button type="button" style="display: none" data-name="<?= $name ?>" data-append="image_manger_inputs_<?=$id?>" class="btn btn-info image_manger_edit">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+@push('script')
+<?php include_once './vendor/SayedNofal/ImageManager/js/selector.js'; ?>
+<style>
+<?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.css'; ?>
+</style>
+<script id='manager-script'>
+<?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.js'; ?>
+</script>
+<script>
+<?php include_once './vendor/SayedNofal/ImageManager/cropper/cropper.js'; ?>
+    $(document).ready(function() {
+    $('body').append($('#image_manger_single_choose_<?= $id ?>'));
+ });
+</script>
+
+<style>
+    <?php include_once './vendor/SayedNofal/ImageManager/css/style.css'; ?>
+</style>
+@endpush
+

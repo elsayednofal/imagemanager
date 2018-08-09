@@ -225,7 +225,7 @@ class ImageManagerController extends Controller {
         if(count($images_ids)>0){
             $images=  \Elsayednofal\Imagemanager\Models\ImageManagerModel::whereIn('id',$images_ids)->get();
         }
-        return view('ImageManager::selector',['name'=>$name,'multi'=>$multi,'images'=>$images]);
+        return view('image-manager.'.config('ImageManager.bootstrap_v').'.selector',['name'=>$name,'multi'=>$multi,'images'=>$images]);
     }
     
     function getImages($keyword=''){

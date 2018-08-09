@@ -48,7 +48,13 @@ return [
      * applay middelware groupe to this package controller 
      * ex :- 'middelware_group'=>'backend' or 'middelware_group'=>'web'
      */
-    'middelware_group'=>''
+    'middelware_group'=>'',
+    
+    /*
+     * bootstrap version 
+     * use b+version like b3,b4,b5
+     */
+    'bootstrap_v'=>'b3'
     
     
 ];
