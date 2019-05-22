@@ -25,7 +25,7 @@ class ImageManagerController extends Controller {
             $response->status = 400;
             $response->message = 'image type not allowed';
             $response->data = [];
-            echo json_encode($response);
+            return json_encode($response);
             die;
         }
         
@@ -50,7 +50,7 @@ class ImageManagerController extends Controller {
                 'path' => $file_system->getFullPath(config('ImageManager.upload_path')),
                 'id'=>$image_mang->id
             ];
-            echo json_encode($response);
+            return json_encode($response);
             die;
         }
         
@@ -61,7 +61,7 @@ class ImageManagerController extends Controller {
                         'path' => $file_system->getFullPath(config('ImageManager.upload_path').'/temp'),
                         'id'   => -1
                 ];
-        echo json_encode($response);
+        return json_encode($response);
         die;
     }
     
