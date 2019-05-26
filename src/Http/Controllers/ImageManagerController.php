@@ -15,8 +15,7 @@ class ImageManagerController extends Controller {
             $response->status = 400;
             $response->message = 'missing image file';
             $response->data = [];
-            echo json_encode($response);
-            die;
+            return json_encode($response);
         }
 
         // check if file is valide image
@@ -25,8 +24,8 @@ class ImageManagerController extends Controller {
             $response->status = 400;
             $response->message = 'image type not allowed';
             $response->data = [];
-            echo json_encode($response);
-            die;
+            return json_encode($response);
+            
         }
         
         $file_system=new FileSystem();
@@ -61,8 +60,7 @@ class ImageManagerController extends Controller {
                         'path' => $file_system->getFullPath(config('ImageManager.upload_path').'/temp'),
                         'id'   => -1
                 ];
-        echo json_encode($response);
-        die;
+        return json_encode($response);
     }
     
     
