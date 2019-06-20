@@ -49,8 +49,7 @@ class ImageManagerController extends Controller {
                 'path' => $file_system->getFullPath(config('ImageManager.upload_path')),
                 'id'=>$image_mang->id
             ];
-            echo json_encode($response);
-            die;
+            return json_encode($response);
         }
         
         $response->status = 200;
@@ -111,8 +110,7 @@ class ImageManagerController extends Controller {
             $response->status = 400;
             $response->message = 'missing image file';
             $response->data = [];
-            echo json_encode($response);
-            die;
+            return json_encode($response);
         }
 
         // check if file is valide image
@@ -121,8 +119,7 @@ class ImageManagerController extends Controller {
             $response->status = 400;
             $response->message = 'image type not allowed';
             $response->data = [];
-            echo json_encode($response);
-            die;
+            return json_encode($response);
         }
         
         // check if image not duplicated
@@ -135,8 +132,7 @@ class ImageManagerController extends Controller {
                 'path' => config('ImageManager.upload_path'),
                 'id'=>$image_mang->id
             ];
-            echo json_encode($response);
-            die;
+            return json_encode($response);
         }
         
         // upload the image
@@ -167,8 +163,7 @@ class ImageManagerController extends Controller {
                         'path' => config('ImageManager.upload_path'),
                         'id'   => $image_manger->id
                 ];
-        echo json_encode($response);
-        die;
+        return json_encode($response);
     }
 
     private function makeThumb($src, $dest, $desired_width,$desired_height) {
@@ -331,8 +326,7 @@ class ImageManagerController extends Controller {
                         'path' => $dst,
                         'id'   => -1
                 ];
-        echo json_encode($response);
-        die;
+        return json_encode($response);
     }
     
     private function Crop($src,$dst,$type,$crop_data,$rotate,$flipX,$flipY){
