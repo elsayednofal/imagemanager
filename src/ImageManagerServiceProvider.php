@@ -37,7 +37,7 @@ class ImageManagerServiceProvider extends ServiceProvider
          */
         $router=$this->app->router;
         if(config('ImageManager.middelware_group')!=''):
-            $router->group([ 'middleware' => [config('ImageManager.middelware_group')]], function($router) {
+            $router->group([ 'middleware' => config('ImageManager.middelware_group')], function($router) {
 			require __DIR__ . '/Http/routes.php';
 		});
         else:    
