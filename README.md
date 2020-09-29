@@ -3,36 +3,37 @@ Image manger to mange upload and select image with one line of code
 
 ## Installation
 - run this command 
-` composer require elsayednofal/imagemanager`
+` composer require elsayednofal/imagemanager:3.0`
 - add service provider to you app config in path config/app.php
 ` Elsayednofal\Imagemanager\ImageManagerServiceProvider::class ` 
 - in alias add the line 
-` 'ImageManager' => Elsayednofal\Imagemanager\Http\Controllers\Facades\ImageManager::class `
+` 'ImageManager' => Elsayednofal\Imagemanager\Controllers\MediaController::class,`
 - run command
-` php artisan vendor:publish --force ` 
+` php artisan vendor:publish ` 
 - run command
 ` php artisan migrate `
  
 
 ## Config
-you can  edit the package config in path config/ImageManager.php
-you can set something like [upload_path,alloweed_types,enable_thumbs,......]
-you will find a comment on every single config in the file
- 
- >> define script stack in your layout "preferd master layout "
+  - edit configration from file config/image-manager
+	- you can change view from backend/image-manager
  
  
 ## Usage
+1- add `{!! ImageManager::loadAssets() !!}` befor </body> close
+2- add `  {!! ImageManager::loadModal() !!}` after </body>
+
+### Selector
 - one single line in your blade where you want uploader in your form :
 ```php  
  //images[] is the variable you will recieve the ids of selected or uploaded images in 
- <?= ImageManager::selector('images[]')?>
+ {!! ImageManager::selector('images[]') !!}
  ``` 
  
 - some cases like update you want to show old selected images so you can pass the ids as second prameter like :
  ```php  
  //images[] is the variable you will recieve the ids of selected or uploaded images in 
- <?= ImageManager::selector('images[]',[10,15,17])?>
+ {!! ImageManager::selector('images[]',[10,15,17])?>
  ``` 
  
  - some cases you want the user to select just one image :
@@ -40,7 +41,7 @@ you will find a comment on every single config in the file
  //images[] is the variable you will recieve the ids of selected or uploaded images in 
  // [] represent selected ids
  // false => means only one image can be set
- <?= ImageManager::selector('images[]',[],false)?>
+ {!! ImageManager::selector('images[]',[],false)?>
  ```
  How to get the value of selected or uploaded image ?
   The ImageManger::selector() inject input hidden with value of ids of selcted images 
@@ -55,8 +56,16 @@ you will find a comment on every single config in the file
 
    <img src="{{ImageManager::getImagePath($activity->mainImage->image_id,'small')}}" />
     ```
- 
+### single Image uploader
+- one file upload
+```{!! ImageManager::ImageUploader(['name'=>'logo'])!!}```
+
+- upload and update old
+```{!! ImageManager::ImageUploader(['name'=>'logo','image'=>$logo])!!}```
+
+- upload file musr have width and hight
+```{!! ImageManager::ImageUploader(['name'=>'logo','image'=>$logo,'width'=>160,'height'=>160])!!}```
  
 ## Support
- for any questions contact me at : `elsayed_nofal@ymail.com`
+ For any questions contact me at : `elsayed_nofal@ymail.com`
  
