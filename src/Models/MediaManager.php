@@ -9,7 +9,7 @@
 namespace Elsayednofal\Imagemanager\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Elsayednofal\MediaManager\Controllers\FileSystem;
+use Elsayednofal\Imagemanager\Controllers\FileSystem;
 
 class MediaManager extends Model {
 

@@ -1,6 +1,6 @@
 <div class="tab-pane fade show active" id="media-images" role="tabpanel" aria-labelledby="home-tab">
     <div class="loading" v-if="loading">
-        <img src="{{url('vendor/elsayed_nofal/media-manager/loader.gif')}}" />
+        <img src="{{url('vendor/elsayednofal/image-manager/loader.gif')}}" />
         <h3>{{trans('media-manager::media.loading')}} {{trans('media-manager::media.images')}} .....</h3>
     </div>
     <div v-if="!loading">
