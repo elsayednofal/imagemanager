@@ -29,12 +29,12 @@
         
         <div class="row" id="media-manager-content" v-on:scroll="scrollLoad" style="position: relative">
             <div v-bind:class="selected_images.length > 0 ? 'col-md-9':'col-md-12'">
-                <img v-for='image in images' v-bind:src="'{{config('media-manager.upload_path')}}/thumbs/'+image.name" v-bind:data-id="image.id" v-bind:class="['media-image',{'image-selected' : in_arr(selected_images,image) } ]" v-bind:xx='in_arr(selected_images,image)' @click="selectImage(image)" />
+                <img v-for='image in images' v-bind:src="'{{config('image-manager.upload_path')}}/thumbs/'+image.name" v-bind:data-id="image.id" v-bind:class="['media-image',{'image-selected' : in_arr(selected_images,image) } ]" v-bind:xx='in_arr(selected_images,image)' @click="selectImage(image)" />
             </div>
             <div v-if="selected_images.length>0" class="col-md-3 selected-area">
                 <div class="row m" v-if="selected_images.length==1">
                     <div class="input-group mt-1 mr-1 ml-1">
-                        <input type="text" id="image_url"  readonly="" class="form-control" placeholder="Recipient's username" v-bind:value="'{{url(str_replace('./','',config('media-manager.upload_path')))}}/'+selected_images[0].name" aria-describedby="button-addon2">
+                        <input type="text" id="image_url"  readonly="" class="form-control" placeholder="Recipient's username" v-bind:value="'{{url(str_replace('./','',config('image-manager.upload_path')))}}/'+selected_images[0].name" aria-describedby="button-addon2">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="copy" @click="copy()"><i class="fas fa-copy text-primary"></i></button>
                         </div>
@@ -47,7 +47,7 @@
                 <div class="row">
                     <ul id="sortable">
                         <li v-for="(image,index) in selected_images" v-bind:data-index="index" v-bind:class="[{one_image:selected_images.length==1},'ui-state-default sort-image']">
-                            <img v-bind:data-id="image.id"  v-bind:src="'{{config('media-manager.upload_path')}}/'+image.name" v-bind:data-index="index" v-bind:class="['media-image on-img']" />
+                            <img v-bind:data-id="image.id"  v-bind:src="'{{config('image-manager.upload_path')}}/'+image.name" v-bind:data-index="index" v-bind:class="['media-image on-img']" />
                             <i class="far fa-times-circle text-light bg-danger remove-image" @click="removeImage(image)" ></i>
                         </li>
                     </ul>
